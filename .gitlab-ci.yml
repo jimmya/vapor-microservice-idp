@@ -1,4 +1,4 @@
-image: swift/4.2 
+image: swift/latest
 
 cache:
   key: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
