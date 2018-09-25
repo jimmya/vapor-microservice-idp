@@ -73,6 +73,12 @@ final class UserClientTests: XCTestCase {
         XCTAssertThrowsError(try client.findUser(email: email, password: password, on: container).wait())
     }
     
+    static let allTests = [
+        ("testFindUserShouldSendRequest", testFindUserShouldSendRequest),
+        ("testFindUserShouldReturnUser", testFindUserShouldReturnUser),
+        ("testFindUserErrorShouldThrowError", testFindUserErrorShouldThrowError)
+    ]
+    
     final class MockClient: Client, Service {
         
         var container: Container
