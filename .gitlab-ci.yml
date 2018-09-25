@@ -1,25 +1,14 @@
-stages:
-  - build
-  - test
+image: swift/4.2 
 
 cache:
   key: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
   paths:
     - .build
 
-build:
-  stage: build
-  script:
-    - whoami
-    - swift --version
-    - vapor clean -y --verbose
-    - vapor build --verbose
-  tags:
-    - swift
-
 test:
-  stage: test
   script:
-    - vapor test --verbose
+    - swift package resolve
+    - swift package clean
+    - swift test
   tags:
     - swift
