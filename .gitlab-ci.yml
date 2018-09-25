@@ -1,5 +1,9 @@
 image: swift:4.2
 
+stages:
+  - test
+  - deploy
+
 cache:
   key: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
   paths:
@@ -25,3 +29,13 @@ test:
     - swift test
   tags:
     - docker
+
+deploy:
+  when: on_success
+  only:
+   - master
+  script:
+    - export
+    - docker login -u $CI_DEPLOY_USERNAME -p $CI_DEPLOY_TOKEN registry.gitlab.com
+    - docker build -t registry.gitlab.com/jimmya92/vapor-microservice-idp .
+    - docker push registry.gitlab.com/jimmya92/vapor-microservice-idp
