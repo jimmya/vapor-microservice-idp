@@ -40,4 +40,4 @@ deploy:
     - docker build -t registry.gitlab.com/jimmya92/vapor-microservice-idp .
     - docker push registry.gitlab.com/jimmya92/vapor-microservice-idp
   tags:
-    - docker
+    - ssh
