@@ -5,12 +5,18 @@ cache:
   paths:
     - .build
 
+services:
+  - postgres
+
 variables:
-  DATABASE_URL: postgresql://jimmy@postgres:5432/microservice 
+  DATABASE_URL: postgresql://jimmy:password@postgres:5432/microservice 
   ACCESS_TOKEN_VALID_DURATION: 3600 
   JWT_SECRET: test 
   REFRESH_TOKEN_VALID_DURATION: 2592000
   USERS_HOST: http://user-service:8080
+  POSTGRES_DB: microservice
+  POSTGRES_USER: jimmy
+  POSTGRES_PASSWORD: password
 
 test:
   script:
