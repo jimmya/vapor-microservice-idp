@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+
+cache:
+  key: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
+  paths:
+    - .build
+
+build:
+  stage: build
+  script:
+    - swift --version
+    - vapor clean -y --verbose
+    - vapor build --verbose
+  tags:
+    - swift
+
+test:
+  stage: test
+  script:
+    - vapor test --verbose
+  tags:
+    - swift
