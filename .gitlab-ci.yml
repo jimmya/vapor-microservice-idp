@@ -5,6 +5,13 @@ cache:
   paths:
     - .build
 
+variables:
+  DATABASE_URL: postgresql://jimmy@postgres:5432/microservice 
+  ACCESS_TOKEN_VALID_DURATION: 3600 
+  JWT_SECRET: test 
+  REFRESH_TOKEN_VALID_DURATION: 2592000
+  USERS_HOST: http://user-service:8080
+
 test:
   script:
     - swift package resolve
