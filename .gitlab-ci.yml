@@ -1,4 +1,7 @@
-image: swift/latest
+image: kylef/swiftenv
+
+before_script:
+  - swiftenv install 4.2
 
 cache:
   key: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
