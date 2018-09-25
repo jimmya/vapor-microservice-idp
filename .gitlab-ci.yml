@@ -10,6 +10,7 @@ cache:
 build:
   stage: build
   script:
+    - whoami
     - swift --version
     - vapor clean -y --verbose
     - vapor build --verbose
