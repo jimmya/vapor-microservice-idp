@@ -9,15 +9,15 @@ final class RefreshTokenRepositoryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        let config = Config()
-        var services = Services()
-        services.register(ContentConfig.self)
-        services.register(ContentCoders.self)
-        let container = BasicContainer(
-            config: config,
-            environment: .testing,
-            services: services,
-            on: EmbeddedEventLoop()
-        )
+//        let config = Config()
+//        var services = Services()
+//        services.register(ContentConfig.self)
+//        services.register(ContentCoders.self)
+//        let container = BasicContainer(
+//            config: config,
+//            environment: .testing,
+//            services: services,
+//            on: EmbeddedEventLoop()
+//        )
     }
 }
