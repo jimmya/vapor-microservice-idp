@@ -23,6 +23,7 @@ variables:
   POSTGRES_PASSWORD: password
 
 test:
+  stage: test
   script:
     - swift package resolve
     - swift package clean
@@ -30,7 +31,8 @@ test:
   tags:
     - docker
 
-deploy:
+deploy-master:
+  stage: deploy
   when: on_success
   only:
    - master
@@ -39,5 +41,18 @@ deploy:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker build -t registry.gitlab.com/jimmya92/vapor-microservice-idp:latest .
     - docker push registry.gitlab.com/jimmya92/vapor-microservice-idp:latest
+  tags:
+    - ssh
+
+deploy-tag:
+  stage: deploy
+  when: on_success
+  only:
+   - tags
+  script:
+    - export
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker build -t registry.gitlab.com/jimmya92/vapor-microservice-idp:$CI_COMMIT_REF_NAME .
+    - docker push registry.gitlab.com/jimmya92/vapor-microservice-idp:$CI_COMMIT_REF_NAME
   tags:
     - ssh
