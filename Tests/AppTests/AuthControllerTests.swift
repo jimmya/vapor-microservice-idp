@@ -197,7 +197,7 @@ final class AuthControllerTests: XCTestCase {
         
         // Then
         XCTAssertTrue(mockRefreshTokenRepository.invokedDelete)
-        XCTAssertEqual(mockRefreshTokenRepository.invokedDeleteParameters?.token, getTokenResponse)
+        XCTAssertEqual(mockRefreshTokenRepository.invokedDeleteParameters, getTokenResponse)
     }
     
     func testRefreshTokenShouldStoreNewToken() throws {
@@ -255,36 +255,40 @@ final class AuthControllerTests: XCTestCase {
     
     final class MockRefreshTokenRepository: RefreshTokenRepository {
         
+        static func makeService(for worker: Container) throws -> Self {
+            return .init()
+        }
+        
         var invokedFind = false
         var invokedFindCount = 0
-        var invokedFindParameters: (token: String, connectable: DatabaseConnectable)?
+        var invokedFindParameters: String?
         var mockFindResponse: EventLoopFuture<RefreshToken?>!
-        func find(token: String, on connectable: DatabaseConnectable) -> EventLoopFuture<RefreshToken?> {
+        func find(token: String) -> EventLoopFuture<RefreshToken?> {
             invokedFind = true
             invokedFindCount += 1
-            invokedFindParameters = (token, connectable)
+            invokedFindParameters = token
             return mockFindResponse
         }
         
         var invokedStore = false
         var invokedStoreCount = 0
-        var invokedStoreParameters: (token: RefreshToken, connectable: DatabaseConnectable)?
+        var invokedStoreParameters: RefreshToken?
         var mockStoreResponse: EventLoopFuture<RefreshToken>!
-        func store(token: RefreshToken, on connectable: DatabaseConnectable) -> EventLoopFuture<RefreshToken> {
+        func store(token: RefreshToken) -> EventLoopFuture<RefreshToken> {
             invokedStore = true
             invokedStoreCount += 1
-            invokedStoreParameters = (token, connectable)
+            invokedStoreParameters = token
             return mockStoreResponse
         }
         
         var invokedDelete = false
         var invokedDeleteCount = 0
-        var invokedDeleteParameters: (token: RefreshToken, connectable: DatabaseConnectable)?
+        var invokedDeleteParameters: RefreshToken?
         var mockDeleteResponse: EventLoopFuture<Void>!
-        func delete(token: RefreshToken, on connectable: DatabaseConnectable) -> EventLoopFuture<Void> {
+        func delete(token: RefreshToken) -> EventLoopFuture<Void> {
             invokedDelete = true
             invokedDeleteCount += 1
-            invokedDeleteParameters = (token, connectable)
+            invokedDeleteParameters = token
             return mockDeleteResponse
         }
     }
