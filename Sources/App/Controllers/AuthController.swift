@@ -29,9 +29,13 @@ private extension AuthController {
         let s3 = try req.makeS3Client()
         let fileName = UUID().uuidString + ".jpg"
         let mimeType = uploadRequest.file.contentType?.description ?? MediaType.plainText.description
-        let file = File.Upload(data: uploadRequest.file.data, destination: fileName, mime: mimeType)
+        let file = File.Upload(data: uploadRequest.file.data, destination: fileName, access: .publicRead, mime: mimeType) // Note: only add `access: .publicRead` if you want the file to be available for anyone to download
         return try s3.put(file: file, on: req).map { response in
             // Either do something with response, e.g. store file url in db etc.
+            
+            // Generate url to store in db
+            let signer = try req.make(S3Signer.self)
+            let url = signer.config.region.hostUrlString(bucket: response.bucket) + response.path
             return .created
         }
     }
