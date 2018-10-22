@@ -28,7 +28,9 @@ private extension AuthController {
     func uploadFile(_ req: Request, uploadRequest: FileUpload) throws -> Future<HTTPStatus> {
         let s3 = try req.makeS3Client()
         let fileName = UUID().uuidString + ".jpg"
-        return try s3.put(file: File.Upload(data: uploadRequest.file.data, destination: fileName), on: req).map { response in
+        let mimeType = uploadRequest.file.contentType?.description ?? MediaType.plainText.description
+        let file = File.Upload(data: uploadRequest.file.data, destination: fileName, mime: mimeType)
+        return try s3.put(file: file, on: req).map { response in
             // Either do something with response, e.g. store file url in db etc.
             return .created
         }
