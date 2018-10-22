@@ -1,1 +1,0 @@
-docker run -p 8080:8080 -it -e DATABASE_URL=postgresql://jimmy@docker.for.mac.host.internal:5432/microservice -e ACCESS_TOKEN_VALID_DURATION=3600 -e JWT_SECRET=test -e REFRESH_TOKEN_VALID_DURATION=2592000 -e USERS_HOST=http://user-service:8080 idp:1.0.0

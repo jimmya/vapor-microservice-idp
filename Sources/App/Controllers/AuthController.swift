@@ -1,15 +1,38 @@
 import Vapor
+import FluentPostgreSQL
+import S3
+
+struct FileUpload: Content {
+    
+    let file: Core.File
+}
 
 struct AuthController: RouteCollection {
+    
+    private let repository: RefreshTokenRepository
+    
+    init(repository: RefreshTokenRepository) {
+        self.repository = repository
+    }
     
     func boot(router: Router) throws {
         let authRouter = router.grouped("auth")
         
         authRouter.post(GetTokenRequest.self, at: "token", use: getToken)
+        authRouter.post(FileUpload.self, at: "upload", use: uploadFile)
     }
 }
 
 private extension AuthController {
+    
+    func uploadFile(_ req: Request, uploadRequest: FileUpload) throws -> Future<HTTPStatus> {
+        let s3 = try req.makeS3Client()
+        let fileName = UUID().uuidString + ".jpg"
+        return try s3.put(file: File.Upload(data: uploadRequest.file.data, destination: fileName), on: req).map { response in
+            // Either do something with response, e.g. store file url in db etc.
+            return .created
+        }
+    }
     
     func getToken(_ req: Request, getTokenRequest: GetTokenRequest) throws -> Future<GetTokenResponse> {
         switch getTokenRequest.grantType {
