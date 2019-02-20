@@ -1,5 +1,4 @@
 import Vapor
-import FluentPostgreSQL
 
 protocol UserClient: Service {
     func findUser(email: String, password: String, on container: Container) throws -> Future<GetUserResponse>
